@@ -1,0 +1,282 @@
+<sdf version='1.9'> <!-- Specify the version of SDF being used -->
+  <world name='task-1'> <!-- Define the world name -->
+    <physics name='1ms' type='ode'> <!-- Set physics engine parameters -->
+      <max_step_size>0.001</max_step_size> <!-- Maximum step size for simulation -->
+      <real_time_factor>1</real_time_factor> <!-- Real-time factor for simulation speed -->
+      <real_time_update_rate>1000</real_time_update_rate> <!-- Update rate for real-time simulation -->
+    </physics>
+    <plugin name='ignition::gazebo::systems::Physics' filename='ignition-gazebo-physics-system'/> <!-- Load the physics plugin -->
+    <plugin name='ignition::gazebo::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/> <!-- Load user command plugin -->
+    <plugin name='ignition::gazebo::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/> <!-- Load scene broadcasting plugin -->
+    <plugin name='ignition::gazebo::systems::Buoyancy' filename='ignition-gazebo-buoyancy-system'> <!-- Load buoyancy plugin -->
+      <graded_buoyancy>
+        <default_density>1000</default_density> <!-- Default water density -->
+        <density_change>
+          <above_depth>0</above_depth> <!-- Depth at which density changes apply -->
+          <density>1</density> <!-- Density value for the buoyancy calculation -->
+        </density_change>
+        <!-- Enables object to have buoyancy -->
+      </graded_buoyancy>
+      <enable>sphere</enable>
+      <enable>bouy1</enable> <!-- Enable buoyancy for the bouy1 top right -->
+      <enable>bouy2</enable> <!-- Enable buoyancy for the bouy2 top left -->
+      <enable>bouy3</enable> <!-- Enable buoyancy for the bouy3 bottom right -->
+      <enable>bouy4</enable> <!-- Enable buoyancy for the bouy4 top right -->
+    </plugin>
+    <gravity>0 0 -9.8</gravity> <!-- Set gravity vector -->
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field> <!-- Define magnetic field -->
+    <atmosphere type='adiabatic'/> <!-- Define the type of atmosphere -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient> <!-- Set ambient light color -->
+      <background>0.7 0.7 0.7 1</background> <!-- Set background color -->
+      <shadows>true</shadows> <!-- Enable shadows in the scene -->
+    </scene>
+    <model name='water_plane'> <!-- Define a model for the water surface -->
+      <static>true</static> <!-- Make the water plane static -->
+      <link name='link'> <!-- Create a link for the water plane -->
+        <visual name='water_plane'> <!-- Define visual properties of the water plane -->
+          <geometry>
+            <plane>
+              <size>100 100</size> <!-- Size of the water plane -->
+              <normal>0 0 1</normal> <!-- Orientation of the plane -->
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0 0 1 0.5</ambient> <!-- Set ambient color of the water -->
+            <diffuse>0 0 1 0.5</diffuse> <!-- Set diffuse color of the water -->
+            <specular>0 0 1 0.5</specular> <!-- Set specular color of the water -->
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose> <!-- Position and orientation of the water plane -->
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose> <!-- Inertial pose of the link -->
+          <mass>1</mass> <!-- Mass of the water plane -->
+          <inertia>
+            <ixx>1</ixx> <!-- Inertia around x-axis -->
+            <ixy>0</ixy> <!-- Inertia product xy -->
+            <ixz>0</ixz> <!-- Inertia product xz -->
+            <iyy>1</iyy> <!-- Inertia around y-axis -->
+            <iyz>0</iyz> <!-- Inertia product yz -->
+            <izz>1</izz> <!-- Inertia around z-axis -->
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind> <!-- Disable wind effects on the water plane -->
+      </link>
+      <pose>0 0 0 0 -0 0</pose> <!-- Overall pose of the model -->
+      <self_collide>false</self_collide> <!-- Disable self-collision for the model -->
+    </model>
+    
+    <model name='buoy1'> <!-- Define a model for the sphere -->
+      <pose>3 0 0 0 0 0</pose> <!-- Position and orientation of the sphere -->
+      <link name='sphere_link'> <!-- Create a link for the sphere -->
+        <inertial>
+          <inertia>
+            <ixx>0.1</ixx> <!-- Inertia around x-axis -->
+            <ixy>0</ixy> <!-- Inertia product xy -->
+            <ixz>0</ixz> <!-- Inertia product xz -->
+            <iyy>0.1</iyy> <!-- Inertia around y-axis -->
+            <iyz>0</iyz> <!-- Inertia product yz -->
+            <izz>0.1</izz> <!-- Inertia around z-axis -->
+          </inertia>
+          <mass>25</mass> <!-- Mass of the sphere (should be adjusted for buoyancy) -->
+          <pose>0 0 0 0 -0 0</pose> <!-- Inertial pose of the sphere -->
+        </inertial>
+        <collision name='sphere_collision'> <!-- Define collision properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the sphere -->
+            </sphere>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/> <!-- Friction settings for the collision -->
+            </friction>
+            <bounce/> <!-- Enable bounce on collision -->
+            <contact/> <!-- Enable contact detection -->
+          </surface>
+        </collision>
+        <visual name='sphere_visual'> <!-- Define visual properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the visual sphere -->
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient> <!-- Set ambient color to red -->
+            <diffuse>1 0 0 1</diffuse> <!-- Set diffuse color to red -->
+            <specular>1 0 0 1</specular> <!-- Set specular color to red -->
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose> <!-- Pose of the visual element -->
+        <enable_wind>false</enable_wind> <!-- Disable wind effects on the sphere -->
+      </link>
+      <static>false</static> <!-- Set sphere as non-static -->
+      <self_collide>false</self_collide> <!-- Disable self-collision for the sphere -->
+    </model>
+    
+    <model name='buoy2'> <!-- Define a model for the sphere -->
+      <pose>15.5 0 0 0 0 0</pose> <!-- Position and orientation of the sphere -->
+      <link name='sphere_link'> <!-- Create a link for the sphere -->
+        <inertial>
+          <inertia>
+            <ixx>0.1</ixx> <!-- Inertia around x-axis -->
+            <ixy>0</ixy> <!-- Inertia product xy -->
+            <ixz>0</ixz> <!-- Inertia product xz -->
+            <iyy>0.1</iyy> <!-- Inertia around y-axis -->
+            <iyz>0</iyz> <!-- Inertia product yz -->
+            <izz>0.1</izz> <!-- Inertia around z-axis -->
+          </inertia>
+          <mass>25</mass> <!-- Mass of the sphere (should be adjusted for buoyancy) -->
+          <pose>0 0 0 0 -0 0</pose> <!-- Inertial pose of the sphere -->
+        </inertial>
+        <collision name='sphere_collision'> <!-- Define collision properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the sphere -->
+            </sphere>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/> <!-- Friction settings for the collision -->
+            </friction>
+            <bounce/> <!-- Enable bounce on collision -->
+            <contact/> <!-- Enable contact detection -->
+          </surface>
+        </collision>
+        <visual name='sphere_visual'> <!-- Define visual properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the visual sphere -->
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient> <!-- Set ambient color to red -->
+            <diffuse>1 0 0 1</diffuse> <!-- Set diffuse color to red -->
+            <specular>1 0 0 1</specular> <!-- Set specular color to red -->
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose> <!-- Pose of the visual element -->
+        <enable_wind>false</enable_wind> <!-- Disable wind effects on the sphere -->
+      </link>
+      <static>false</static> <!-- Set sphere as non-static -->
+      <self_collide>false</self_collide> <!-- Disable self-collision for the sphere -->
+    </model>
+    
+     <model name='buoy3'> <!-- Define a model for the sphere -->
+      <pose>3 5 0 0 0 0</pose> <!-- Position and orientation of the sphere -->
+      <link name='sphere_link'> <!-- Create a link for the sphere -->
+        <inertial>
+          <inertia>
+            <ixx>0.1</ixx> <!-- Inertia around x-axis -->
+            <ixy>0</ixy> <!-- Inertia product xy -->
+            <ixz>0</ixz> <!-- Inertia product xz -->
+            <iyy>0.1</iyy> <!-- Inertia around y-axis -->
+            <iyz>0</iyz> <!-- Inertia product yz -->
+            <izz>0.1</izz> <!-- Inertia around z-axis -->
+          </inertia>
+          <mass>25</mass> <!-- Mass of the sphere (should be adjusted for buoyancy) -->
+          <pose>0 0 0 0 -0 0</pose> <!-- Inertial pose of the sphere -->
+        </inertial>
+        <collision name='sphere_collision'> <!-- Define collision properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the sphere -->
+            </sphere>
+          </geometry>
+          <surface>s
+            <friction>
+              <ode/> <!-- Friction settings for the collision -->
+            </friction>
+            <bounce/> <!-- Enable bounce on collision -->
+            <contact/> <!-- Enable contact detection -->
+          </surface>
+        </collision>
+        <visual name='sphere_visual'> <!-- Define visual properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the visual sphere -->
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0 1 0 1</ambient> <!-- Set ambient color to green -->
+            <diffuse>0 1 0 1</diffuse> <!-- Set diffuse color to green -->
+            <specular>0 1 0 1</specular> <!-- Set specular color to green -->
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose> <!-- Pose of the visual element -->
+        <enable_wind>false</enable_wind> <!-- Disable wind effects on the sphere -->
+      </link>
+      <static>false</static> <!-- Set sphere as non-static -->
+      <self_collide>false</self_collide> <!-- Disable self-collision for the sphere -->
+    </model>
+    
+    <model name='buoy4'> <!-- Define a model for the sphere -->
+      <pose>15.5 5 0 0 0 0</pose> <!-- Position and orientation of the sphere -->
+      <link name='sphere_link'> <!-- Create a link for the sphere -->
+        <inertial>
+          <inertia>
+            <ixx>0.1</ixx> <!-- Inertia around x-axis -->
+            <ixy>0</ixy> <!-- Inertia product xy -->
+            <ixz>0</ixz> <!-- Inertia product xz -->
+            <iyy>0.1</iyy> <!-- Inertia around y-axis -->
+            <iyz>0</iyz> <!-- Inertia product yz -->
+            <izz>0.1</izz> <!-- Inertia around z-axis -->
+          </inertia>
+          <mass>25</mass> <!-- Mass of the sphere (should be adjusted for buoyancy) -->
+          <pose>0 0 0 0 -0 0</pose> <!-- Inertial pose of the sphere -->
+        </inertial>
+        <collision name='sphere_collision'> <!-- Define collision properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the sphere -->
+            </sphere>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/> <!-- Friction settings for the collision -->
+            </friction>
+            <bounce/> <!-- Enable bounce on collision -->
+            <contact/> <!-- Enable contact detection -->
+          </surface>
+        </collision>
+        <visual name='sphere_visual'> <!-- Define visual properties for the sphere -->
+          <geometry>
+            <sphere>
+              <radius>0.5</radius> <!-- Radius of the visual sphere -->
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0 1 0 1</ambient> <!-- Set ambient color to green -->
+            <diffuse>0 1 0 1</diffuse> <!-- Set diffuse color to green -->
+            <specular>0 1 0 1</specular> <!-- Set specular color to green -->
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose> <!-- Pose of the visual element -->
+        <enable_wind>false</enable_wind> <!-- Disable wind effects on the sphere -->
+      </link>
+      <static>false</static> <!-- Set sphere as non-static -->
+      <self_collide>false</self_collide> <!-- Disable self-collision for the sphere -->
+    </model>
+
+    <light name='sun' type='directional'> <!-- Define a directional light source -->
+      <pose>0 0 10 0 -0 0</pose> <!-- Position and orientation of the light -->
+      <cast_shadows>true</cast_shadows> <!-- Enable shadow casting for the light -->
+      <intensity>1</intensity> <!-- Intensity of the light -->
+      <direction>-0.5 0.1 -0.9</direction> <!-- Direction of the light -->
+      <diffuse>1 1 1 1</diffuse> <!-- Diffuse color of the light -->
+      <specular>0.5 0.5 0.5 1</specular> <!-- Specular color of the light -->
+      <attenuation>
+        <range>1000</range> <!-- Maximum range of the light -->
+        <linear>0.01</linear> <!-- Linear attenuation factor -->
+        <constant>0.90000000000000002</constant> <!-- Constant attenuation factor -->
+        <quadratic>0.001</quadratic> <!-- Quadratic attenuation factor -->
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle> <!-- Inner angle for spotlight effect -->
+        <outer_angle>0</outer_angle> <!-- Outer angle for spotlight effect -->
+        <falloff>0</falloff> <!-- Falloff factor for spotlight effect -->
+      </spot>
+    </light>
+  </world>
+</sdf>
+

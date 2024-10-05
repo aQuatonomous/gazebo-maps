@@ -1,0 +1,456 @@
+<sdf version='1.9'>
+  <world name='buoyancy'>
+    <physics name='1ms' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin name='ignition::gazebo::systems::Physics' filename='ignition-gazebo-physics-system'/>
+    <plugin name='ignition::gazebo::systems::UserCommands' filename='ignition-gazebo-user-commands-system'/>
+    <plugin name='ignition::gazebo::systems::SceneBroadcaster' filename='ignition-gazebo-scene-broadcaster-system'/>
+    <plugin name='ignition::gazebo::systems::Buoyancy' filename='ignition-gazebo-buoyancy-system'>
+      <graded_buoyancy>
+        <default_density>1000</default_density>
+        <density_change>
+          <above_depth>0</above_depth>
+          <density>1</density>
+        </density_change>
+      </graded_buoyancy>
+      <enable>lighter_than_water::ball::body</enable>
+      <enable>lighter_than_water::box</enable>
+      <enable>balloon_lighter_than_air</enable>
+      <enable>box_neutral_buoyancy</enable>
+      <enable>box_neutral_buoyancy_collision_offset</enable>
+      <enable>multi_collision_neutral_buoyancy</enable>
+      <enable>box_negative_buoyancy</enable>
+    </plugin>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <model name='water_plane'>
+      <static>true</static>
+      <link name='link'>
+        <visual name='water_plane'>
+          <geometry>
+            <plane>
+              <size>100 100</size>
+              <normal>0 0 1</normal>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0 0 1 0.5</ambient>
+            <diffuse>0 0 1 0.5</diffuse>
+            <specular>0 0 1 0.5</specular>
+          </material>
+        </visual>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 -0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    
+    
+    <model name='lighter_than_water'>
+      <pose>0 0 -0.012618 0 -0 0</pose>
+      <model name='ball'>
+        <link name='body'>
+          <pose>0 0 0 0 0 0</pose>
+          <inertial>
+            <mass>25</mass>
+            <inertia>
+              <ixx>86.289078218599656</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>86.289078218599656</iyy>
+              <iyz>0</iyz>
+              <izz>5.0265482457436708</izz>
+            </inertia>
+          </inertial>
+          <visual name='body_visual'>
+            <geometry>
+              <sphere>
+                <radius>0.20000000000000001</radius>
+              </sphere>
+            </geometry>
+          </visual>
+          <collision name='body_collision'>
+            <geometry>
+              <sphere>
+                <radius>0.20000000000000001</radius>
+              </sphere>
+            </geometry>
+            <surface>
+              <friction>
+                <ode/>
+              </friction>
+              <bounce/>
+              <contact/>
+            </surface>
+          </collision>
+        </link>
+      </model>
+      <model name='box'>
+        <pose>3 5 0 0.3 0.2 0.1</pose>
+        <link name='body'>
+          <inertial>
+            <mass>200</mass>
+            <inertia>
+              <ixx>33.329999999999998</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>33.329999999999998</iyy>
+              <iyz>0</iyz>
+              <izz>33.329999999999998</izz>
+            </inertia>
+          </inertial>
+          <visual name='body_visual'>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+          </visual>
+          <collision name='body_collision'>
+            <geometry>
+              <box>
+                <size>1 1 1</size>
+              </box>
+            </geometry>
+            <surface>
+              <friction>
+                <ode/>
+              </friction>
+              <bounce/>
+              <contact/>
+            </surface>
+          </collision>
+        </link>
+      </model>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='balloon_lighter_than_air'>
+      <pose>0 -5 2335.31 0 -0 0</pose>
+      <link name='body'>
+        <pose>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.10000000000000001</mass>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <visual name='body_visual'>
+          <geometry>
+            <sphere>
+              <radius>0.20000000000000001</radius>
+            </sphere>
+          </geometry>
+        </visual>
+        <collision name='body_collision'>
+          <geometry>
+            <sphere>
+              <radius>0.20000000000000001</radius>
+            </sphere>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='box_neutral_buoyancy'>
+      <pose>0 5 -3 0 -0 0</pose>
+      <link name='body'>
+        <inertial>
+          <mass>1000</mass>
+          <pose>0 0 0.1 0 -0 0</pose>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+        </inertial>
+        <visual name='body_visual'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='body_collision'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 -0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='box_neutral_buoyancy_collision_offset'>
+      <pose>-3 5 2 0 -0 0</pose>
+      <link name='body'>
+        <inertial>
+          <mass>1000</mass>
+          <pose>0 0 -4.9 0 -0 0</pose>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+        </inertial>
+        <visual name='link_origin'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <visual name='collision_origin'>
+          <pose>0 0 -5 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='buoyancy_volume'>
+          <pose>0 0 -5 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 -0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='multi_collision_neutral_buoyancy'>
+      <pose>-6 5 -3 0 -0 0</pose>
+      <link name='body'>
+        <inertial>
+          <mass>1000</mass>
+          <pose>0 0 0.1 0 -0 0</pose>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+        </inertial>
+        <visual name='collision_1_vis'>
+          <pose>-0.25 0 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.5 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <visual name='collision_2_vis'>
+          <pose>0.25 0 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.5 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='collision_1'>
+          <pose>-0.25 0 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.5 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <collision name='collision_2'>
+          <pose>0.25 0 0 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.5 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 -0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='box_negative_buoyancy'>
+      <pose>0 -8 -349.518 0 -0 0</pose>
+      <link name='body'>
+        <inertial>
+          <mass>1050</mass>
+          <pose>0 0 0.1 0 -0 0</pose>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+        </inertial>
+        <visual name='body_visual'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='body_collision'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 -0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='box_no_buoyancy'>
+      <pose>4 -6 -6195.25 0 -0 0</pose>
+      <link name='body'>
+        <inertial>
+          <mass>1050</mass>
+          <pose>0 0 0.1 0 -0 0</pose>
+          <inertia>
+            <ixx>86.289100000000005</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>86.289100000000005</iyy>
+            <iyz>0</iyz>
+            <izz>5.0265500000000003</izz>
+          </inertia>
+        </inertial>
+        <visual name='body_visual'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+        <collision name='body_collision'>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <pose>0 0 0 0 -0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <light name='sun' type='directional'>
+      <pose>0 0 10 0 -0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>-0.5 0.1 -0.9</direction>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.5 0.5 0.5 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.90000000000000002</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+  </world>
+</sdf>
